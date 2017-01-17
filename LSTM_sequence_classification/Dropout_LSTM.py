@@ -9,6 +9,7 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
+
 # fix random seed for reproducibility
 numpy.random.seed(7)
 # load the dataset but only keep the top n words, zero the rest
