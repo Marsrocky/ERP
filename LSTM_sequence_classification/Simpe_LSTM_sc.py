@@ -14,8 +14,8 @@ np.random.seed(7)
 
 # We need to load the IMDB dataset. We are constraining the dataset to the top frequent 5,000 words. We also split the dataset into train (50%) and test (50%) sets.
 top_words = 5000
-
 (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=top_words)
+
 # Input length: 500
 # truncate and pad input sequences
 max_review_length = 500
