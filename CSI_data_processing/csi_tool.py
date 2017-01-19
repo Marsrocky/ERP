@@ -6,9 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # 读入幅度和相位信息
+matPhase = 'csiraw_phase.mat'
+matMag = 'csiraw_amp.mat'
+rawPhase = sio.loadmat(matPhase)['csiraw_phase'][0]
+rawMag = sio.loadmat(matMag)['csiraw_amp'][0]
 
-matfn = 'magangle.mat'
-data = sio.loadmat(matfn)
+# rawData: 3 * (600 * 114)
+print rawPhase
 
-phaseData = data['phase']
-magData = data['magnitude']
+# autoencoder 提取特征

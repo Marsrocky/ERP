@@ -7,4 +7,3 @@ function [ output_args ] = read2ma( csidata )
     phase = angle(vdata);
     save('magangle.mat', 'magnitude', 'phase');
 end
-
