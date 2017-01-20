@@ -1,0 +1,62 @@
+# - encoding=utf-8 -
+
+import scipy.io as sio
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+from keras.layers import Input, Dense
+from keras.models import Model
+import numpy as np
+
+from csi_tool import read_csi
+
+
+# dataSize = 600 * (3 * 114)
+vMag, vPhase = read_csi()
+
+# Normalize the magnitude to (30, 50) and flatten to vector
+vMag = vMag.astype('float32') / 50.
+vMag = vMag.reshape((len(vMag), np.prod(vMag.shape[1:])))	# 600 * 342
+
+# 500 for training and 100 for testing
+magTrain = vMag[0:500, :]
+magTest = vMag[500:600, :]
+
+# plt.plot(vPhase[0], 'b')
+# plt.show()
+
+# autoencoder 提取特征
+encoding_dim = 32 # 32-dim feature
+input_img = Input(shape=(342,))
+encoded = Dense(encoding_dim, activation='relu')(input_img)
+decoded = Dense(342, activation='sigmoid')(encoded)
+autoencoder = Model(input=input_img, output=decoded)
+# this model maps an input to its encoded representation
+encoder = Model(input=input_img, output=encoded)
+encoded_input = Input(shape=(encoding_dim,))
+decoded_layer = autoencoder.layers[-1]
+decoder = Model(input=encoded_input, output=decoded_layer(encoded_input))
+
+########### Train ############
+
+# configure our model to use a per-pixel binary crossentropy loss, and the Adadelta optimizer
+autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+
+# train the autoencoder
+autoencoder.fit(magTrain, magTrain,
+	nb_epoch=50,
+	batch_size=64,
+	shuffle=True,
+	validation_data=(magTest, magTest))
+
+encoded_mag = encoder.predict(magTest)
+decoded_mag = decoder.predict(encoded_mag)
+
+# Result
+fig, ax = plt.subplots()
+ax.plot(magTest[1], 'b', label='Original')
+ax.plot(decoded_mag[1], 'r', label='Autoencoder')
+legend = ax.legend(loc='upper right', shadow=True, fontsize='x-large')
+
+# plt.show()
+plt.savefig('1-layer-autoencoder.png')
+plt.show()
