@@ -25,16 +25,22 @@ magTest = vMag[500:600, :]
 # plt.show()
 
 # autoencoder 提取特征
-encoding_dim = 32 # 32-dim feature
+ncoding_dim = 16 # 32-dim feature
+
+# model
 input_img = Input(shape=(342,))
-encoded = Dense(encoding_dim, activation='relu')(input_img)
-decoded = Dense(342, activation='sigmoid')(encoded)
+encoded = Dense(128, activation='relu')(input_img)
+encoded = Dense(64, activation='relu')(encoded)
+encoded = Dense(32, activation='relu')(encoded)
+encoded = Dense(16, activation='relu')(encoded)
+
+decoded = Dense(32, activation='relu')(encoded)
+decoded = Dense(64, activation='relu')(encoded)
+decoded = Dense(128, activation='relu')(decoded)
+decoded = Dense(342, activation='sigmoid')(decoded)
+
+# this model maps an input to its reconstruction
 autoencoder = Model(input=input_img, output=decoded)
-# this model maps an input to its encoded representation
-encoder = Model(input=input_img, output=encoded)
-encoded_input = Input(shape=(encoding_dim,))
-decoded_layer = autoencoder.layers[-1]
-decoder = Model(input=encoded_input, output=decoded_layer(encoded_input))
 
 ########### Train ############
 
@@ -44,20 +50,19 @@ autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
 # train the autoencoder
 autoencoder.fit(magTrain, magTrain,
 	nb_epoch=50,
-	batch_size=64,
+	batch_size=256,
 	shuffle=True,
 	validation_data=(magTest, magTest))
 
-encoded_mag = encoder.predict(magTest)
-decoded_mag = decoder.predict(encoded_mag)
+decoded_mag = autoencoder.predict(magTest)
 
 # Result
 fig, ax = plt.subplots()
 for i in range(100):
 	ax.plot(magTest[i], 'b', label='Original')
 	ax.plot(decoded_mag[i], 'r', label='Autoencoder')
-#legend = ax.legend(loc='upper right', shadow=True)
 
-# plt.show()
-plt.savefig('1-layer-autoencoder.png')
+# legend = ax.legend(loc='upper right', shadow=True)
+
+plt.savefig('deep-layers-autoencoder.png')
 plt.show()
