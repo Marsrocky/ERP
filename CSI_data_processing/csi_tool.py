@@ -23,3 +23,13 @@ def read_csi():
 				vPhase[i][j][k] = rawPhase[j][i][k]
 				vMag[i][j][k] = rawMag[j][i][k]
 	return vMag, vPhase
+
+# # dataSize = 600 * (3 * 114)
+# vMag, vPhase = read_csi()
+
+# # Normalize the magnitude to (60, 50) and flatten to vector
+# vMag = vMag.astype('float32') / 60.
+# vMag = vMag.reshape((len(vMag), np.prod(vMag.shape[1:])))	# 600 * 342
+
+# plt.plot(vMag)
+# plt.show()

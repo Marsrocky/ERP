@@ -13,16 +13,13 @@ from csi_tool import read_csi
 # dataSize = 600 * (3 * 114)
 vMag, vPhase = read_csi()
 
-# Normalize the magnitude to (30, 50) and flatten to vector
-vMag = vMag.astype('float32') / 50.
+# Normalize the magnitude to (30, 60) and flatten to vector
+vMag = vMag.astype('float32') / 60.
 vMag = vMag.reshape((len(vMag), np.prod(vMag.shape[1:])))	# 600 * 342
 
 # 500 for training and 100 for testing
 magTrain = vMag[0:500, :]
 magTest = vMag[500:600, :]
-
-# plt.plot(vPhase[0], 'b')
-# plt.show()
 
 # autoencoder 提取特征
 encoding_dim = 32 # 32-dim feature
