@@ -18,8 +18,8 @@ vMag = vMag.astype('float32') / 60.
 vMag = vMag.reshape((len(vMag), np.prod(vMag.shape[1:])))	# 600 * 342
 
 # 500 for training and 100 for testing
-magTrain = vMag[0:500, :]
-magTest = vMag[500:600, :]
+magTrain = vMag[0:400, :]
+magTest = vMag[400:500, :]
 
 # autoencoder 提取特征
 encoding_dim = 32 # 32-dim feature
