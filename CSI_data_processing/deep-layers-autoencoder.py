@@ -61,5 +61,5 @@ for i in range(100):
 
 # legend = ax.legend(loc='upper right', shadow=True)
 
-plt.savefig('deep-layers-autoencoder.png')
+plt.savefig('figure/deep-layers-autoencoder.png')
 plt.show()

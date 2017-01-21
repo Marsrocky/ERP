@@ -56,5 +56,5 @@ for i in range(100):
 #legend = ax.legend(loc='upper right', shadow=True)
 
 # plt.show()
-plt.savefig('1-layer-autoencoder.png')
+plt.savefig('figure/1-layer-autoencoder.png')
 plt.show()
