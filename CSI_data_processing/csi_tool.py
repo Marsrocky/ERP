@@ -33,10 +33,13 @@ vMag = vMag.reshape((len(vMag), np.prod(vMag.shape[1:])))	# 600 * 342
 vPhase = vPhase.astype('float32') / np.pi
 vPhase = vPhase.reshape((len(vPhase), np.prod(vPhase.shape[1:])))
 
-vPhase = vPhase[:, :114]
+# 中心化
+for i in range(len(vPhase)):
+	vPhase[i] = vPhase[i] - vPhase[i][0]
+
 plt.figure(figsize=(12,8))
 p = plt.subplot()
-for i in range(4, 10):
+for i in range(0, 10):
 	plt.plot(vPhase[i])
 
 p.set_title('phase')
