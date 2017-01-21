@@ -19,7 +19,7 @@ vMag = vMag.reshape((len(vMag), np.prod(vMag.shape[1:])))	# 600 * 342
 
 # 500 for training and 100 for testing
 magTrain = vMag[0:400, :]
-magTest = vMag[400:500, :]
+magTest = vMag[400:600, :]
 
 # autoencoder 提取特征
 encoding_dim = 32 # 32-dim feature
@@ -48,13 +48,27 @@ autoencoder.fit(magTrain, magTrain,
 encoded_mag = encoder.predict(magTest)
 decoded_mag = decoder.predict(encoded_mag)
 
+plt.figure(figsize=(12,8))
+p1 = plt.subplot(211)
+p2 = plt.subplot(212)
+
+for i in range(100, 200):
+	p1.plot(decoded_mag[i-100])
+	p2.plot(decoded_mag[i])
+
+p1.set_title('Comparison of decoded results between static and moving')
+p1.set_xlabel("subcarrier")
+p2.set_xlabel("subcarrier")
+p1.set_ylabel("magnitude")
+p2.set_ylabel("magnitude")
+
 # Result
-fig, ax = plt.subplots()
-for i in range(100):
-	ax.plot(magTest[i], 'b', label='Original')
-	ax.plot(decoded_mag[i], 'r', label='Autoencoder')
+# fig, ax = plt.subplots()
+# for i in range(100):
+# 	ax.plot(magTest[i], 'b', label='Original')
+# 	ax.plot(decoded_mag[i], 'r', label='Autoencoder')
 #legend = ax.legend(loc='upper right', shadow=True)
 
 # plt.show()
-plt.savefig('figure/1-layer-autoencoder.png')
+plt.savefig('figure/results-of-decoded-in-static-and-moving.png')
 plt.show()
