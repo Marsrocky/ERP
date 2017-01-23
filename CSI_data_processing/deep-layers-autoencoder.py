@@ -11,7 +11,7 @@ from csi_tool import read_csi
 
 
 # dataSize = 600 * (3 * 114)
-vMag, vPhase = read_csi()
+vMag, vPhase = read_csi('csiraw_phase', 'csiraw_amp')
 
 # Normalize the magnitude to (30, 60) and flatten to vector
 vMag = vMag.astype('float32') / 60.
@@ -61,5 +61,5 @@ for i in range(100):
 
 # legend = ax.legend(loc='upper right', shadow=True)
 
-plt.savefig('figure/deep-layers-autoencoder.png')
+plt.savefig('figure/deep-layers-autoencoder-2.png')
 plt.show()
