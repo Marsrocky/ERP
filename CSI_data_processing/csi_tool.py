@@ -39,8 +39,9 @@ def main():
 	vPhase = vPhase.reshape((len(vPhase), np.prod(vPhase.shape[1:])))
 	
 	# 中心化
-	# for i in range(len(vPhase)):
-	# 	vPhase[i] = vPhase[i] - vPhase[i][0]
+	for i in range(len(vPhase)):
+		vPhase[i] = vPhase[i] - vPhase[i][0]
+		vPhases[i] = vPhases[i] - vPhases[i][0]
 	# Data analysis
 
 	# vstatic = vPhase[:, :114]
@@ -64,16 +65,16 @@ def main():
 	p2 = plt.subplot(212)
 
 	for i in range(100):
-		p1.plot(vMags[i])
-		p2.plot(vMag[i])
+		p1.plot(vPhase[i])
+		p2.plot(vPhases[i])
 
-	p1.set_title('Comparison of magnitude in 2 different spots')
+	p1.set_title('Comparison of phase in 2 different spots')
 	p1.set_xlabel("subcarrier")
 	p2.set_xlabel("subcarrier")
-	p1.set_ylabel("magnitude")
-	p2.set_ylabel("magnitude")
+	p1.set_ylabel("phase")
+	p2.set_ylabel("phase")
 
-	plt.savefig('figure/magnitude-in-2-spots.png')
+	plt.savefig('figure/phase-in-2-spots.png')
 	plt.show()
 
 	# # Comparison of phase between static and moving in 1min
