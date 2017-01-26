@@ -42,21 +42,7 @@ def main():
 	for i in range(len(vPhase)):
 		vPhase[i] = vPhase[i] - vPhase[i][0]
 		vPhases[i] = vPhases[i] - vPhases[i][0]
-	# Data analysis
-
-	# vstatic = vPhase[:, :114]
-	# plt.figure(figsize=(12,8))
-	# p = plt.subplot()
-	# for i in range(4, 10):
-	# 	plt.plot(vPhase[i])
-
-	# p.set_title('phase')
-	# p.set_xlabel("subcarrier")
-	# p.set_ylabel("phase")
-	# plt.show()
-
-	# plt.savefig('figure/magnitude-between-static-and-moving.png')
-
+	
 	#################################################################
 
 	# Comparison of magnitude between static and moving in 1min
