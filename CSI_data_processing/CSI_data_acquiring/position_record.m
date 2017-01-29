@@ -8,7 +8,7 @@ packet_actual=1;
 for i=1:no_position
     for j=1:length(total_port)
         for k=1:no_package
-            fileName = strcat(int2str(i), '\', total_port(j), '-', int2str(k));
+            fileName = strcat(int2str(i), '/', total_port(j), '-', int2str(k));
             read_log_file_be (fileName{1})
             Data = ans;
             
@@ -34,6 +34,20 @@ for i=1:no_position
             csi_mag{i}{j}{k}=db(csi_rawdata{i}{j}{k});
             csi_phase{i}{j}{k}=angle(csi_rawdata{i}{j}{k});
         end
+    end
+end
+
+% reshape to vector
+for i=1:no_position
+    for j=1:length(total_port)
+        temp = zeros(no_package, 342);
+        temp2 = zeros(no_package, 342);
+        for k=1:no_package
+            temp(k,:) = reshape(csi_mag{i}{j}{k}', 1, []); 
+            temp2(k,:) = reshape(csi_phase{i}{j}{k}', 1, []); 
+        end
+        csi_mag{i}{j} = temp;
+        csi_phase{i}{j} = temp;
     end
 end
 
