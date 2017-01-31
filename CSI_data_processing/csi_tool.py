@@ -3,8 +3,6 @@
 
 import scipy.io as sio
 import matplotlib.pyplot as plt
-from keras.layers import Input, Dense
-from keras.models import Model
 import numpy as np
 
 def read_csi(matPhase = 'csiraw_phase', matMag = 'csiraw_amp'):

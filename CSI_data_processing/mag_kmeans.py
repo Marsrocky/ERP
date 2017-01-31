@@ -3,15 +3,13 @@
 
 import scipy.io as sio
 import matplotlib.pyplot as plt
-from keras.layers import Input, Dense
-from keras.models import Model
 import numpy as np
 from sklearn.cluster import KMeans
 from csi_tool import read_csi
 
 def main():
 	# dataSize = 600 * (3 * 114)
-	vMags, vPhases = read_csi('csiraw_phase_s1', 'csiraw_amp_s1')
+	vMags, vPhases = read_csi('csiraw_phase_no1', 'csiraw_amp_no1')
 	vMag, vPhase = read_csi('csiraw_phase', 'csiraw_amp')
 
 	# Normalize the magnitude to (60, 50) and flatten to vector
