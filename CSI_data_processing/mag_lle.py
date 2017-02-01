@@ -1,5 +1,6 @@
 # - encoding=utf-8 -
-# Kmeans: 正确率100%
+# Locally Linear Embeddings Comparison
+# 看起来一般的线性和非线性降维结果都不好
 
 import scipy.io as sio
 import matplotlib.pyplot as plt
@@ -20,7 +21,7 @@ def main():
 	# Locally Linear Embeddings
 	X = vMag[:100,]
 	X_r, err = manifold.locally_linear_embedding(X, n_neighbors=12,
-                                             n_components=9)
+                                             n_components=5)
 	plt.figure(figsize=(12,8))
 	p1 = plt.subplot(211)
 	p2 = plt.subplot(212)
