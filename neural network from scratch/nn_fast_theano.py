@@ -93,7 +93,7 @@ gradient_step = theano.function(
 			 (W1, W1 - epsilon * dW1),
 			 (b2, b2 - epsilon * db2),
 			 (b1, b1 - epsilon * db1)))
-%timeit gradient_step()
+#%timeit gradient_step()
 
 # Build the model with learning parameters 
 def build_model(num_passes = 20000):
