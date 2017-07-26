@@ -94,7 +94,7 @@ biases = {
 pred = wifi_net(x, weights, biases, keep_prob)
 
 # 定义损失函数和学习步骤
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # 测试网络
