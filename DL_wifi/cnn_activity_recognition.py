@@ -4,6 +4,9 @@
 import tensorflow as tf
 import numpy as np
 
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
 # 超参数
 learning_rate = 0.001
 training_iters = 200000
@@ -11,9 +14,10 @@ batch_size = 64
 display_step = 20
 
 # 网络参数
-n_input = 114*114;
-n_classes = 4;
-dropout = 0.8;
+data_size = 28
+n_input = data_size * data_size
+n_classes = 10
+dropout = 0.8
 
 # 占位符
 x = tf.placeholder(tf.float32, [None, n_input])
@@ -30,12 +34,12 @@ def max_pool(name, l_input, k):
 
 # 归一化操作
 def norm(name, l_input, lsize=4):
-    return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)
+	return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)
 
 
 def wifi_net(_X, _weights, _biases, _dropout):
 	''' Model for WiFi based Activity Recognition'''
-	_X = tf.reshape(_X, shape=[-1, 114, 114, 1])
+	_X = tf.reshape(_X, shape=[-1, data_size, data_size, 1])
 
 	# Convolutional Layer #1
 	conv1 = conv2d('conv1', _X, _weights['wc1'], _biases['bc1'])
@@ -67,20 +71,20 @@ def wifi_net(_X, _weights, _biases, _dropout):
 
 # Save all weights
 weights = {
-    'wc1': tf.Variable(tf.random_normal([3, 3, 1, 64])),
-    'wc2': tf.Variable(tf.random_normal([3, 3, 64, 128])),
-    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-    'wd1': tf.Variable(tf.random_normal([4*4*256, 1024])),
-    'wd2': tf.Variable(tf.random_normal([1024, 1024])),
-    'out': tf.Variable(tf.random_normal([1024, n_classes]))
+	'wc1': tf.Variable(tf.random_normal([3, 3, 1, 64])),
+	'wc2': tf.Variable(tf.random_normal([3, 3, 64, 128])),
+	'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
+	'wd1': tf.Variable(tf.random_normal([4*4*256, 1024])),
+	'wd2': tf.Variable(tf.random_normal([1024, 1024])),
+	'out': tf.Variable(tf.random_normal([1024, n_classes]))
 }
 biases = {
-    'bc1': tf.Variable(tf.random_normal([64])),
-    'bc2': tf.Variable(tf.random_normal([128])),
-    'bc3': tf.Variable(tf.random_normal([256])),
-    'bd1': tf.Variable(tf.random_normal([1024])),
-    'bd2': tf.Variable(tf.random_normal([1024])),
-    'out': tf.Variable(tf.random_normal([n_classes]))
+	'bc1': tf.Variable(tf.random_normal([64])),
+	'bc2': tf.Variable(tf.random_normal([128])),
+	'bc3': tf.Variable(tf.random_normal([256])),
+	'bd1': tf.Variable(tf.random_normal([1024])),
+	'bd2': tf.Variable(tf.random_normal([1024])),
+	'out': tf.Variable(tf.random_normal([n_classes]))
 }
 
 # 构建模型
@@ -97,10 +101,24 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 # 初始化所有的共享变量
 init = tf.global_variables_initializer()
 
-
-
-
-
-
+# 开启一个训练
+with tf.Session() as sess:
+	sess.run(init)
+	step = 1
+	# Keep training until reach max iterations
+	while step * batch_size < training_iters:
+		batch_xs, batch_ys = mnist.train.next_batch(batch_size)
+		# 获取批数据
+		sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keep_prob: dropout})
+		if step % display_step == 0:
+			# 计算精度
+			acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
+			# 计算损失值
+			loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
+			print "Iter " + str(step*batch_size) + ", Minibatch Loss= " + "{:.6f}".format(loss) + ", Training Accuracy= " + "{:.5f}".format(acc)
+		step += 1
+	print "Optimization Finished!"
+	# 计算测试精度
+	print "Testing Accuracy:", sess.run(accuracy, feed_dict={x: mnist.test.images[:256], y: mnist.test.labels[:256], keep_prob: 1.})
 
 
