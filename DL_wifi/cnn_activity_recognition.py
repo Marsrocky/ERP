@@ -7,6 +7,10 @@ import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
 # 超参数
 learning_rate = 0.001
 training_iters = 200000
@@ -100,6 +104,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 # 初始化所有的共享变量
 init = tf.global_variables_initializer()
+saver = tf.train.Saver()
 
 # 开启一个训练
 with tf.Session() as sess:
@@ -120,5 +125,7 @@ with tf.Session() as sess:
 	print "Optimization Finished!"
 	# 计算测试精度
 	print "Testing Accuracy:", sess.run(accuracy, feed_dict={x: mnist.test.images[:256], y: mnist.test.labels[:256], keep_prob: 1.})
-
-
+	# 保存模型
+	save_path="model.ckpt"
+	saver.save(sess, save_path)
+	print "Model Store"
